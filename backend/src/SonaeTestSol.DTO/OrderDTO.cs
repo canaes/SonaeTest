@@ -1,0 +1,4 @@
+﻿namespace SonaeTestSol.DTO
+{
+
+}
