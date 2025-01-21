@@ -1,4 +1,5 @@
 using SonaeTestSol.API.Configuration;
+using SonaeTestSol.API.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,11 @@ builder.Services.ResolveDependencies();
 builder.Services.AddApiVersioningConfiguration();
 
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddControllers(x =>
+{
+    x.Filters.Add<HttpResponseExceptionFilter>();
+});
 
 var app = builder.Build();
 
