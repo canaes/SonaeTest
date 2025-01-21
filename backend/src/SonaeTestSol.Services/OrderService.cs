@@ -24,7 +24,7 @@ namespace SonaeTestSol.Services
 
         public async Task<ICollection<Order>> GetAll(int skip, int quantity)
         {
-            return Orders.Skip(skip).Take(quantity).ToList();
+            return await Task.FromResult(Orders.Skip(skip).Take(quantity).ToList());
         }
 
         public async Task<(bool, int)> AddOrder(int quantity)
@@ -61,7 +61,19 @@ namespace SonaeTestSol.Services
             }
 
             order.Status = Domain.Enumerators.Enumerators.StatusOrder.Completed;
-            return (true, _stockService.Get().Result);
+            return await Task.FromResult((true, _stockService.Get().Result));
+        }
+
+
+        public async Task ProcessExpireOrder()
+        {
+            var order = Orders.Where(x => x.Status == Domain.Enumerators.Enumerators.StatusOrder.Active && x.ExpiresOn < DateTime.Now).ToList();
+
+            foreach (var entity in order)
+            {
+                entity.Status = Domain.Enumerators.Enumerators.StatusOrder.Expired;
+                await _stockService.RefundOrder(1);
+            }
         }
     }
 }

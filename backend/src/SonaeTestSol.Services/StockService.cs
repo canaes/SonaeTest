@@ -29,5 +29,10 @@ namespace SonaeTestSol.Services
         {
             return (productsQuantity -= quantity);
         }
+
+        public async Task<int> RefundOrder(int quantity)
+        {
+            return (productsQuantity += quantity);
+        }
     }
 }

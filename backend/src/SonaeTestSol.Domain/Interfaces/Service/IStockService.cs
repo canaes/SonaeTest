@@ -5,5 +5,6 @@ namespace SonaeTestSol.Domain.Interfaces.Service
     {
         Task<int> Get();
         Task<int> PayOrder(int quantity);
+        Task<int> RefundOrder(int quantity);
     }
 }
