@@ -10,6 +10,7 @@ namespace SonaeTestSol.Domain.Interfaces.Service
         Task<(bool, int)> AddOrder(int quantity);
         Task<(bool, int)> CompleteOrder(Guid Id);
         Task<ICollection<Order>> GetAll(int skip, int quantity);
+        Task<int> GetQuantityActiveComplete();
         Task ProcessExpireOrder();
     }
 }

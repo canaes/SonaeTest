@@ -20,19 +20,10 @@ namespace SonaeTestSol.Services
             productsQuantity = 100;
         }
 
-        public async Task<int> Get()
+        public async Task<int> Get(int qtdeOrderActiveOrCompleted)
         {
-            return productsQuantity;
+            return productsQuantity - qtdeOrderActiveOrCompleted;
         }
 
-        public async Task<int> PayOrder(int quantity)
-        {
-            return (productsQuantity -= quantity);
-        }
-
-        public async Task<int> RefundOrder(int quantity)
-        {
-            return (productsQuantity += quantity);
-        }
     }
 }
