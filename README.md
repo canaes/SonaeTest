@@ -32,7 +32,11 @@ Em ReactJs com typescript, criado com vitejs.
 Foi utilizado yarn para criá-lo.
 Para inicar em desenvolvimento: yarn vite .
 Foi adicionada uma camada de proxy e configurações no backend para fugir do impacto de CORS, por rodar ambos em localhost.
-
+O projeto está dividido em:
+- Pages
+- Components
+- Services
+- Types
 
 
 # Back-End
