@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
+using SonaeTestSol.Domain.Interfaces.Repository;
 using SonaeTestSol.Domain.Interfaces.Service;
 using SonaeTestSol.Services;
 using SonaeTestSol.Services.Base;
+using SonaeTestSol.Services.HostedService;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SonaeTestSol.API.Configuration
@@ -15,9 +17,12 @@ namespace SonaeTestSol.API.Configuration
             services.AddSingleton<IErrorService, ErrorService>();
             services.AddSingleton<IOrderService, OrderService>();
             services.AddSingleton<IStockService, StockService>();
-            
+            services.AddSingleton<IOrderRepository, OrderRepository>();
+
 
             //services.AddScoped<IErrorService, ErrorService>();
+
+            services.AddHostedService<StockHostService>();
             return services;
         }
     }

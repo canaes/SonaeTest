@@ -13,11 +13,10 @@ namespace SonaeTestSol.Services
 {
     public class StockService : BaseService, IStockService
     {
-        private int productsQuantity;
+        private int productsQuantity = 100;
 
         public StockService(IErrorService errorService) : base(errorService)
         {
-            productsQuantity = 100;
         }
 
         public async Task<int> Get()
@@ -25,9 +24,10 @@ namespace SonaeTestSol.Services
             return productsQuantity;
         }
 
-        public async Task<int> PayOrder(int quantity)
+        public async Task Set(int value)
         {
-            return (productsQuantity -= quantity);
+            productsQuantity = value;
         }
+
     }
 }

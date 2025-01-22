@@ -28,7 +28,7 @@ namespace SonaeTestSol.API.Controllers.v1
         [HttpGet("")]
         public async Task<IActionResult> Get()
         {
-            var response = await _stockService.Get();
+            var response = await _orderService.GetQuantityAvailable();
 
             return Ok(new ResponseViewModel<int>
             {
