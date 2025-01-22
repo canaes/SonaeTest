@@ -1,6 +1,7 @@
 export type Order = {
     id: string;
     quantity: number;
-    status: string;
+    status: number;
+    statusStr: string;
     expiresOn: string;
   }
