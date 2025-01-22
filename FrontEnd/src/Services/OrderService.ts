@@ -8,8 +8,6 @@ export const fetchOrders = async (): Promise<Order[]> => {
   //return response.json();
 
   const data = await response.json();
-  console.log(data);  // Adicione um log para garantir que os dados estão corretos
-
   return data.data as Order[];  
 }
 
