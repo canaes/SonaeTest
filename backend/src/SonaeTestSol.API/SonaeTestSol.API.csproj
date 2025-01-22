@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SonaeTestSol.Domain\SonaeTestSol.Domain.csproj" />
     <ProjectReference Include="..\SonaeTestSol.Services\SonaeTestSol.Services.csproj" />
+    <ProjectReference Include="..\SonaeTestSol\SonaeTestSol.Repository.csproj" />
   </ItemGroup>
 
 </Project>

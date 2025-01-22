@@ -20,7 +20,7 @@ namespace SonaeTestSol.Services.Base
             return !ErrorService.Exists();
         }
 
-        protected bool RunValidation<TV, TE>(TV validation, TE entity) where TV : AbstractValidator<TE> where TE : IEntity
+        public bool RunValidation<TV, TE>(TV validation, TE entity) where TV : AbstractValidator<TE> where TE : IEntity
         {
             FluentValidation.Results.ValidationResult validator = validation.Validate(entity);
 
@@ -33,7 +33,7 @@ namespace SonaeTestSol.Services.Base
             return false;
         }
 
-        protected bool RunValidation<TV, TE>(TV validation, IEnumerable<TE> entities) where TV : AbstractValidator<TE> where TE : IEntity
+        public bool RunValidation<TV, TE>(TV validation, IEnumerable<TE> entities) where TV : AbstractValidator<TE> where TE : IEntity
         {
             foreach (TE entity in entities)
             {
