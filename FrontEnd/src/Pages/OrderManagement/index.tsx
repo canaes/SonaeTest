@@ -59,7 +59,7 @@ const OrderManagement: React.FC = () => {
         <h2>Gestão de Encomendas</h2>
         
         <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-          <h4>Stock Disponível: {stockAvailable} ítens</h4>
+          <h4>Estoque Disponível: {stockAvailable} produtos</h4>
           <div><button className="create-order-btn" style={{alignItems: 'right'}} onClick={() => setIsModalOpen(true)}>Criar Nova Encomenda</button></div>
         </div>
         

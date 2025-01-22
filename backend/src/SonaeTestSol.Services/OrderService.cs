@@ -81,7 +81,7 @@ namespace SonaeTestSol.Services
         {
             var order = _orderRepository.GetAll().Result
                             .Where(x => x.Id.Equals(Id) 
-                                && x.Status == Domain.Enumerators.Enumerators.StatusOrder.Active)
+                                && x.Status == Domain.Enumerators.Enumerators.StatusOrder.Active && x.ExpiresOn > DateTime.Now)
                             .FirstOrDefault();
 
             if (order is null)

@@ -41,7 +41,7 @@ const CreateOrderModal: React.FC<CreateOrderModalProps> = ({ onClose, onSubmitSu
               style={{marginLeft: '16px'}}
             />
           </label>
-          <button type="submit" style={{marginLeft: '16px'}}>Submeter Encomenda</button>
+          <button type="submit" style={{marginLeft: '16px'}} className='btnSubmit'>Submeter Encomenda</button>
         </form>
       </div>
     </div>

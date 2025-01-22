@@ -24,4 +24,13 @@
     border-radius: 16px;
     padding: 8px;
   }
+
+  .btnSubmit:hover{
+    background-color: #f6937a;    
+  }
+
+  .btnSubmit{
+    background-color: #ac3713;
+    color: #fff;
+  }
   

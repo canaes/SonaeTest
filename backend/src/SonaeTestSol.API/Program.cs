@@ -53,12 +53,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseCors("AllowLocalhost");
-
-app.Use(async (context, next) =>
+if (app.Environment.IsDevelopment())
 {
-    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-    await next();
-});
+    app.UseCors("AllowLocalhost");
+
+    app.Use(async (context, next) =>
+    {
+        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+        await next();
+    });
+}
+
 
 app.Run();
