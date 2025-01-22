@@ -1,6 +1,7 @@
 ﻿using SonaeTestSol.Domain.Entities;
 using AutoMapper;
 using SonaeTestSol.Domain.DTO;
+using Microsoft.OpenApi.Extensions;
 
 namespace SonaeTestSol.API.Configuration
 {
@@ -8,7 +9,8 @@ namespace SonaeTestSol.API.Configuration
     {
         public AutoMapperConfiguration()
         {
-            CreateMap<Order, OrderDTO>().ReverseMap();
+            CreateMap<Order, OrderDTO>()
+                .ForMember(dest => dest.StatusStr, opt => opt.MapFrom(src => src.Status.GetDisplayName()));
         }
     }
 }
