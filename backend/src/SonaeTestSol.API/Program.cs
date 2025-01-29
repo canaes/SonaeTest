@@ -1,4 +1,5 @@
 using SonaeTestSol.API.Configuration;
+using SonaeTestSol.API.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,23 @@ builder.Services.AddApiVersioningConfiguration();
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddControllers(x =>
+{
+    x.Filters.Add<HttpResponseExceptionFilter>();
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,10 +46,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("AllowLocalhost");
+
+    app.Use(async (context, next) =>
+    {
+        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+        await next();
+    });
+}
+
 
 app.Run();

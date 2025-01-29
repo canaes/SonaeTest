@@ -15,12 +15,10 @@ namespace SonaeTestSol.API.Controllers.v1
     public class OrderController : ControllerBaseSonae
     {
         private readonly IOrderService _orderService;
-        private readonly IStockService _stockService;
 
-        public OrderController(IMapper mapper, IOrderService orderService, IStockService stockService, IErrorService errorService) : base(mapper, errorService)
+        public OrderController(IMapper mapper, IOrderService orderService, IErrorService errorService) : base(mapper, errorService)
         {
             _orderService = orderService;
-            _stockService = stockService;
         }
 
         /// <summary>
@@ -60,7 +58,7 @@ namespace SonaeTestSol.API.Controllers.v1
 
         [ProducesResponseType(typeof(ResponseViewModel<int>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestViewModel), StatusCodes.Status400BadRequest)]
-        [HttpPut("complete/{orderId:guid}")]
+        [HttpPatch("complete/{orderId:guid}")]
         public async Task<IActionResult> CompleteOrder([FromRoute] Guid orderId)
         {
             (bool result, int qtt) = await _orderService.CompleteOrder(orderId);

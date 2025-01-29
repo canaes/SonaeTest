@@ -14,5 +14,6 @@ namespace SonaeTestSol.Domain.DTO
         public int Quantity { get; set; }
         public DateTime ExpiresOn { get; set; }
         public StatusOrder Status { get; set; }
+        public string StatusStr { get; set; }
     }
 }

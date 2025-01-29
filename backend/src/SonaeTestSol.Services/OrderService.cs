@@ -1,4 +1,6 @@
 ﻿using SonaeTestSol.Domain.Entities;
+using SonaeTestSol.Domain.Interfaces;
+using SonaeTestSol.Domain.Interfaces.Repository;
 using SonaeTestSol.Domain.Interfaces.Service;
 using SonaeTestSol.Domain.Models;
 using SonaeTestSol.Services.Base;
@@ -13,55 +15,97 @@ namespace SonaeTestSol.Services
 {
     public class OrderService : BaseService, IOrderService
     {
-        private List<Order> Orders = new List<Order>();
+        
         private readonly IStockService _stockService;
-        const int intervalDelay = 1;
+        private readonly IOrderRepository _orderRepository;
+        const int reserveInterval = 1;
 
-        public OrderService(IErrorService errorService, IStockService stockService) : base(errorService)
+        public OrderService(IErrorService errorService, IStockService stockService, IOrderRepository orderRepository) : base(errorService)
         {
             _stockService = stockService;
+            _orderRepository = orderRepository;
         }
 
         public async Task<ICollection<Order>> GetAll(int skip, int quantity)
         {
-            return Orders.Skip(skip).Take(quantity).ToList();
+            
+            return await Task.FromResult(_orderRepository.GetAll().Result.Skip(skip).Take(quantity).ToList());
+            
         }
 
-        public async Task<(bool, int)> AddOrder(int quantity)
+        public async Task<int> GetQuantityAvailable()
+        {
+            var stockQt = await _stockService.Get();
+            var orderActComp = await _orderRepository.GetQuantityOrders();
+
+            return stockQt - orderActComp;
+        }
+
+        public async Task<(bool, int)> AddOrder(int quantity, Guid? id = null, DateTime? expires = null)
         {
             var entity = new Order
             {
                 Quantity = quantity,
                 Status = Domain.Enumerators.Enumerators.StatusOrder.Active,
-                ExpiresOn = DateTime.Now.AddHours(intervalDelay),
+                ExpiresOn = DateTime.Now.AddHours(reserveInterval),
             };
-
-            if (!RunValidation(new OrderValidation(_stockService.Get().Result), entity))
+            if (id.HasValue)
             {
-                return (false, _stockService.Get().Result);
+                entity.Id = id.Value;
+            }
+            if (expires.HasValue)
+            {
+                entity.ExpiresOn = expires.Value;
             }
 
+            if (!RunValidationService(entity))
+            {
+                return (false, GetQuantityAvailable().Result);
+            }
 
-            Orders.Add(entity);
-            await _stockService.PayOrder(quantity);
-            return (true, _stockService.Get().Result);
+            await _orderRepository.Add(entity);
+            return (true, GetQuantityAvailable().Result);
         }
+
+        public bool RunValidationService(Order entity)
+        {
+            if (!RunValidation(new OrderValidation(GetQuantityAvailable().Result), entity))
+            {
+                return false;
+            }
+            return true;
+        }
+
 
         public async Task<(bool, int)> CompleteOrder(Guid Id)
         {
-            var order = Orders
+            var order = _orderRepository.GetAll().Result
                             .Where(x => x.Id.Equals(Id) 
-                                && x.Status == Domain.Enumerators.Enumerators.StatusOrder.Active)
+                                && x.Status == Domain.Enumerators.Enumerators.StatusOrder.Active && x.ExpiresOn > DateTime.Now)
                             .FirstOrDefault();
 
             if (order is null)
             {
                 ErrorService.Add(new Error("Order not found or cannot be completed"));
-                return (false, _stockService.Get().Result);
+                return (false, GetQuantityAvailable().Result);
             }
 
             order.Status = Domain.Enumerators.Enumerators.StatusOrder.Completed;
-            return (true, _stockService.Get().Result);
+            await _orderRepository.Update(order);
+            
+            return await Task.FromResult((true, GetQuantityAvailable().Result));
+        }
+
+
+        public async Task ProcessExpireOrder()
+        {
+            var order = _orderRepository.GetAll().Result.Where(x => x.Status == Domain.Enumerators.Enumerators.StatusOrder.Active && x.ExpiresOn < DateTime.Now).ToList();
+
+            foreach (var entity in order)
+            {
+                entity.Status = Domain.Enumerators.Enumerators.StatusOrder.Expired;
+            }
+            await Task.CompletedTask;
         }
     }
 }
