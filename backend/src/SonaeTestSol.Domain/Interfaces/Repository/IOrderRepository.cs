@@ -11,6 +11,7 @@ namespace SonaeTestSol.Domain.Interfaces.Repository
     {
         Task<int> Add(Order o);
         Task<List<Order>> GetAll();
+        Task<int> GetQuantityOrders();
         Task Update(Order o);
     }
 }

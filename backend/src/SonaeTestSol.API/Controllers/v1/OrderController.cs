@@ -58,7 +58,7 @@ namespace SonaeTestSol.API.Controllers.v1
 
         [ProducesResponseType(typeof(ResponseViewModel<int>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestViewModel), StatusCodes.Status400BadRequest)]
-        [HttpPut("complete/{orderId:guid}")]
+        [HttpPatch("complete/{orderId:guid}")]
         public async Task<IActionResult> CompleteOrder([FromRoute] Guid orderId)
         {
             (bool result, int qtt) = await _orderService.CompleteOrder(orderId);

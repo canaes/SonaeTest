@@ -18,6 +18,11 @@ namespace SonaeTestSol
             return Orders;
         }
 
+        public async Task<int> GetQuantityOrders()
+        {
+            return Orders.Where(x => x.Status != Domain.Enumerators.Enumerators.StatusOrder.Expired).Sum(x => x.Quantity);
+        }
+
         public async Task<int> Add(Order o)
         {
             Orders.Add(o);

@@ -36,7 +36,7 @@ namespace SonaeTestSol.Services
         public async Task<int> GetQuantityAvailable()
         {
             var stockQt = await _stockService.Get();
-            var orderActComp = _orderRepository.GetAll().Result.Where(x => x.Status != Domain.Enumerators.Enumerators.StatusOrder.Expired).Sum(x => x.Quantity);
+            var orderActComp = await _orderRepository.GetQuantityOrders();
 
             return stockQt - orderActComp;
         }
